@@ -1,49 +1,68 @@
-![cra-template-unicorn_logo](./assets/logo.png)
+# form-practice
 
-# cra-template-unicorn
-
-![GitHub Action Status](https://github.com/JaeYeopHan/cra-template-unicorn/workflows/Deploy/badge.svg) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![yarn version](https://badge.fury.io/js/cra-template-unicorn.svg)](https://badge.fury.io/js/cra-template-unicorn)
-
-The template for [Create React App](https://github.com/facebook/create-react-app).
-
-## Start Template
-
-### npx
+## Start
 
 ```sh
-npx create-react-app my-app --template unicorn
+$ yarn
+$ yarn start
 ```
 
-### npm
+## Todo
 
-```sh
-yarn init react-app my-app --template unicorn
+- [ ] mock data 구축 (input.json)
+- [ ] api directory에서 data entry point 생성
+- [ ] store 구조 설계
+  - [ ] form feature
+  - [ ] loading feature
+- [ ] form/action 설계
+  - [ ] updateForm
+- [ ] 컴포넌트 설계
+  - [ ] shared/Title
+  - [ ] shared/FormTitle
+  - [ ] shared/BackButton
+  - [ ] shared/NextButton
+  - [ ] shared/SubmitButton
+  - [ ] shared/Alert
+  - [ ] shared/Loading
+  - [ ] shared/form/CheckBox
+  - [ ] shared/form/Radio
+  - [ ] shared/form/TextInput
+  - [ ] shared/form/SelectBox
+- [ ] utils
+  - [ ] validate
+
+```ts
+enum FormType {
+  CheckBox = 1,
+  Radio = 2,
+  TextInput = 3,
+  SelectBox = 4,
+}
+
+interface FormOption {
+  id: number
+  text: string
+}
+
+interface FormItem {
+  itemId: number
+  title: string
+  formType: FormType
+  options: FormOption[]
+}
+
+interface FormDataResponse {
+  formId: number
+  title: string
+  items: FormItem[]
+}
+
+interface FormState extends FormDataResponse {
+  answers: { id: Pick<FormItem, 'itemId'>, answer: string }
+}
+
+const initialState: FormState = {}
 ```
-
-### yarn
-
-```sh
-yarn create react-app my-app --template unicorn
-```
-
-## In this template
-
-- [craco](https://github.com/gsoft-inc/craco)
-- [redux-toolkit](https://github.com/reduxjs/redux-toolkit)
-- [react-redux](https://github.com/reduxjs/react-redux)
-- [react-router](https://github.com/ReactTraining/react-router)
-
-## Support
-
-- Support VSCode Integration
-- Support reset.css
-- Support absolute path
-- Customize config with craco
-- Customize eslint config > [link](https://create-react-app.dev/docs/advanced-configuration)
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
 
 <div align="center">
 

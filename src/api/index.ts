@@ -1,6 +1,5 @@
+import mock from "@/assets/input.json";
 import { FormItem } from "@/features/form";
-
-import mock from "../../assets/input.json";
 
 export interface FormDataResponse {
   formId: number;
@@ -8,6 +7,6 @@ export interface FormDataResponse {
   items: FormItem[];
 }
 
-export const fetchFormData = () => {
+export const getFormData = (): Promise<FormDataResponse> => {
   return Promise.resolve(mock);
 };

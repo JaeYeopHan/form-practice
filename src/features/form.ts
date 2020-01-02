@@ -73,6 +73,15 @@ const _ = createSlice({
       if (page > initialState.view.page) {
         state.view.page -= 1;
       }
+    },
+    update(state: FormState, action: PayloadAction<FormAnswer>) {
+      state.answers.push(action.payload);
+    },
+    submit(state: FormState) {
+      const { formId: id, answers: items } = state;
+      const output = { id, items };
+
+      console.log(output);
     }
   }
 });

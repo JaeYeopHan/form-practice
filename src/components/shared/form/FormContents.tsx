@@ -1,19 +1,17 @@
 import React from 'react'
 
 import { FormCheckbox } from "@/components/shared/form/FormCheckbox";
-import { FormOption, FormType } from '@/features/form'
+import { FormItem, FormType } from '@/features/form'
 
 import { FormInput } from './FormInput';
 import { FormRadio } from './FormRadio';
 import { FormSelectBox } from './FormSelectbox';
 import { FormSelectOption } from './FormSelectOption';
 
-interface IFormContentsProps {
-  options: FormOption[]
-  formType: FormType
-}
+interface IFormContentsProps extends FormItem { }
 
 export const FormContents = (props: IFormContentsProps) => {
+
   const Contents = () => {
     switch (props.formType) {
       case FormType.CheckBox:
@@ -28,6 +26,7 @@ export const FormContents = (props: IFormContentsProps) => {
           <FormRadio
             key={option.id}
             {...option}
+            itemId={props.itemId}
           />
         ))
       case FormType.TextInput:

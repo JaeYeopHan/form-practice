@@ -1,16 +1,24 @@
 import React from "react";
 
 interface IFormRadioProps {
+  itemId: number;
   id: number;
   text: string;
 }
 
-export const FormRadio = ({ id, text }: IFormRadioProps) => {
+export const FormRadio = (props: IFormRadioProps) => {
+  const { id, text } = props
+
   return (
     <>
-      <label htmlFor={`radio_${id}`} />
-      <input id={`radio_${id}`} type="radio" className="form-option" />
-      <div className="form-contents">{text}</div>
+      <input
+        id={`radio_${id}`}
+        name={'radio_form_options'}
+        value={text}
+        type="radio"
+        className="form-option"
+      />
+      <label htmlFor={`radio_${id}`}>{text}</label>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "@/features";
@@ -17,11 +17,11 @@ export default () => {
   const dispatch = useDispatch()
   const loading = useSelector<RootState, LoadingState>(state => state[LOADING])
   const title = useSelector<RootState, string>(state => formSelectors.title(state[FORM]))
-  const items = useSelector<RootState, FormItem[]>(state => formSelectors.currentItems(state[FORM]))
+  const item = useSelector<RootState, FormItem>(state => formSelectors.currentItem(state[FORM]))
 
   const handleNextClick = () => dispatch(formActions.toNext())
   const handleBackClick = () => dispatch(formActions.toPrev())
-  const handleSubmitClick = () => dispatch(formActions.submit())
+  const handleSubmitClick = () => console.log(`submit`)
 
   useEffect(() => {
     dispatch(formThunks.fetchFormData())
@@ -35,12 +35,8 @@ export default () => {
     <Main>
       <Title>{title}</Title>
       <FormWrapper>
-        {items.map(item => (
-          <Fragment key={`form_${item.formType}`}>
-            <FormTitle>{item.title}</FormTitle>
-            <FormContents options={item.options} formType={item.formType} />
-          </Fragment>
-        ))}
+        <FormTitle>{item.title}</FormTitle>
+        <FormContents {...item} />
       </FormWrapper>
       <Button onClick={handleBackClick}>Back</Button>
       <Button onClick={handleNextClick}>Next</Button>

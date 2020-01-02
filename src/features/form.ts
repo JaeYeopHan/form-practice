@@ -24,13 +24,13 @@ export interface FormItem {
   options: FormOption[];
 }
 
-export interface FormAnswer {
-  id: Pick<FormItem, "itemId">;
-  answer: string;
-}
+type FormItemByIdType = { [key: number]: FormItem };
 
-export interface FormState extends FormDataResponse {
-  answers: FormAnswer[];
+export interface FormState {
+  formId: number;
+  title: string;
+  itemsById: FormItemByIdType;
+  ids: number[];
   view: {
     page: number;
   };
@@ -40,8 +40,8 @@ const name = "Form";
 const initialState: FormState = {
   formId: 0,
   title: "Default Title",
-  items: [],
-  answers: [],
+  itemsById: {},
+  ids: [],
   view: {
     page: 0
   }
@@ -52,17 +52,32 @@ const _ = createSlice({
   initialState,
   reducers: {
     success(state: FormState, action: PayloadAction<FormDataResponse>) {
+      const { items, title, formId } = action.payload;
+      const ids = items.map(({ itemId }) => itemId);
+      const itemsById = items.reduce(
+        (prev: FormItemByIdType, next: FormItem) => {
+          prev[next.itemId] = next;
+
+          return prev;
+        },
+        {}
+      );
+
       return {
         ...state,
-        ...action.payload
+        formId,
+        title,
+        itemsById,
+        ids
       };
     },
     failure(state: FormState) {},
     toNext(state: FormState) {
-      const { items, view } = state;
+      const { ids, view } = state;
       const { page } = view;
 
-      if (page < items.length - 1) {
+      // TODO validate correct answer
+      if (page < ids.length - 1) {
         state.view.page += 1;
       }
     },
@@ -73,24 +88,16 @@ const _ = createSlice({
       if (page > initialState.view.page) {
         state.view.page -= 1;
       }
-    },
-    update(state: FormState, action: PayloadAction<FormAnswer>) {
-      state.answers.push(action.payload);
-    },
-    submit(state: FormState) {
-      const { formId: id, answers: items } = state;
-      const output = { id, items };
-
-      console.log(output);
     }
   }
 });
 
 const getTitle = (state: FormState): string => state.title;
-const getPage = (state: FormState): number => state.view.page;
-const getItems = (state: FormState): FormItem[] => state.items;
-const getCurrentItems = createSelector([getPage, getItems], (page, items) =>
-  items.filter((_, index) => index === page)
+const getTargetId = (state: FormState): number => state.ids[state.view.page];
+const getItems = (state: FormState): FormItemByIdType => state.itemsById;
+const getCurrentItem = createSelector(
+  [getTargetId, getItems],
+  (page: number, itemsById) => itemsById[page] || {}
 );
 
 function fetchFormData(): AppThunk {
@@ -102,7 +109,8 @@ function fetchFormData(): AppThunk {
 
       dispatch(formActions.success(result));
     } catch (e) {
-      dispatch(formActions.failure());
+      console.error(e);
+      dispatch(formActions.failure()); // TODO errorActions.alert()
     } finally {
       dispatch(loadingActions.finish(name));
     }
@@ -114,7 +122,7 @@ export const formActions = _.actions;
 export const formReducer = _.reducer;
 export const formSelectors = {
   title: getTitle,
-  currentItems: getCurrentItems
+  currentItem: getCurrentItem
 };
 export const formThunks = {
   fetchFormData

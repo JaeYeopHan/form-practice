@@ -19,9 +19,9 @@ export default () => {
   const title = useSelector<RootState, string>(state => formSelectors.title(state[FORM]))
   const items = useSelector<RootState, FormItem[]>(state => formSelectors.currentItems(state[FORM]))
 
-  const toNext = () => dispatch(formActions.toNext())
-  const toBack = () => dispatch(formActions.toPrev())
-  const handleSubmit = () => dispatch(formActions.submit())
+  const handleNextClick = () => dispatch(formActions.toNext())
+  const handleBackClick = () => dispatch(formActions.toPrev())
+  const handleSubmitClick = () => dispatch(formActions.submit())
 
   useEffect(() => {
     dispatch(formThunks.fetchFormData())
@@ -42,9 +42,9 @@ export default () => {
           </Fragment>
         ))}
       </FormWrapper>
-      <Button onClick={toBack}>Back</Button>
-      <Button onClick={toNext}>Next</Button>
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleBackClick}>Back</Button>
+      <Button onClick={handleNextClick}>Next</Button>
+      <Button onClick={handleSubmitClick}>Submit</Button>
     </Main>
   );
 };

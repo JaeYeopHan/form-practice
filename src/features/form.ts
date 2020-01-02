@@ -93,7 +93,7 @@ const getCurrentItems = createSelector([getPage, getItems], (page, items) =>
   items.filter((_, index) => index === page)
 );
 
-export function fetchFormData(): AppThunk {
+function fetchFormData(): AppThunk {
   return async function(dispatch) {
     try {
       dispatch(loadingActions.start(name));
@@ -109,10 +109,13 @@ export function fetchFormData(): AppThunk {
   };
 }
 
+export const FORM = _.name;
+export const formActions = _.actions;
+export const formReducer = _.reducer;
 export const formSelectors = {
   title: getTitle,
   currentItems: getCurrentItems
 };
-export const FORM = _.name;
-export const formActions = _.actions;
-export const formReducer = _.reducer;
+export const formThunks = {
+  fetchFormData
+};

@@ -2,11 +2,11 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "@/features";
-import { fetchFormData, FORM, formActions, FormItem, formSelectors } from "@/features/form";
+import { FORM, formActions, FormItem, formSelectors, formThunks } from "@/features/form";
 import { LOADING, LoadingState } from "@/features/loading";
 
 import { Button } from "./shared/Button";
-import { FormOption } from "./shared/form/FormOption";
+import { FormContents } from "./shared/form/FormContents";
 import { FormTitle } from "./shared/form/FormTitle";
 import { FormWrapper } from "./shared/form/FormWrapper";
 import { Loading } from "./shared/Loading";
@@ -21,9 +21,10 @@ export default () => {
 
   const toNext = () => dispatch(formActions.toNext())
   const toBack = () => dispatch(formActions.toPrev())
+  const handleSubmit = () => dispatch(formActions.submit())
 
   useEffect(() => {
-    dispatch(fetchFormData())
+    dispatch(formThunks.fetchFormData())
   }, [dispatch])
 
   if (loading[FORM]) {
@@ -34,23 +35,16 @@ export default () => {
     <Main>
       <Title>{title}</Title>
       <FormWrapper>
-        {items
-          .map(item => (
-            <Fragment key={`form_${item.formType}`}>
-              <FormTitle>{item.title}</FormTitle>
-              {item.options.map(option => (
-                <FormOption
-                  key={option.id}
-                  {...option}
-                  formType={item.formType}
-                />
-              ))}
-            </Fragment>
-          ))}
+        {items.map(item => (
+          <Fragment key={`form_${item.formType}`}>
+            <FormTitle>{item.title}</FormTitle>
+            <FormContents options={item.options} formType={item.formType} />
+          </Fragment>
+        ))}
       </FormWrapper>
       <Button onClick={toBack}>Back</Button>
       <Button onClick={toNext}>Next</Button>
-      <Button onClick={() => console.log(`submit`)}>Submit</Button>
+      <Button onClick={handleSubmit}>Submit</Button>
     </Main>
   );
 };

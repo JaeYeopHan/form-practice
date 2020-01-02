@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "@/features";
-import { fetchFormData, FORM, FormState } from "@/features/form";
+import { fetchFormData, FORM, formActions, FormItem, formSelectors } from "@/features/form";
 import { LOADING, LoadingState } from "@/features/loading";
 
 import { Button } from "./shared/Button";
@@ -15,27 +15,12 @@ import { Title } from "./shared/Title";
 
 export default () => {
   const dispatch = useDispatch()
-  const formState = useSelector<RootState, FormState>(state => state[FORM])
   const loading = useSelector<RootState, LoadingState>(state => state[LOADING])
-  const [page, setPage] = useState(0);
-  const { title, items } = formState
+  const title = useSelector<RootState, string>(state => formSelectors.title(state[FORM]))
+  const items = useSelector<RootState, FormItem[]>(state => formSelectors.currentItems(state[FORM]))
 
-  const toNext = () =>
-    setPage(prev => {
-      if (prev === items.length - 1) {
-        return prev;
-      }
-      return prev + 1;
-    })
-
-  const toBack = () =>
-    setPage(prev => {
-      if (prev === 0) {
-        return prev;
-      }
-      return prev - 1;
-    })
-
+  const toNext = () => dispatch(formActions.toNext())
+  const toBack = () => dispatch(formActions.toPrev())
 
   useEffect(() => {
     dispatch(fetchFormData())
@@ -50,7 +35,6 @@ export default () => {
       <Title>{title}</Title>
       <FormWrapper>
         {items
-          .filter((_, index) => index === page)
           .map(item => (
             <Fragment key={`form_${item.formType}`}>
               <FormTitle>{item.title}</FormTitle>

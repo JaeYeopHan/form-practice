@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { FormDataResponse, getFormData } from "@/api";
 
@@ -31,6 +31,9 @@ export interface FormAnswer {
 
 export interface FormState extends FormDataResponse {
   answers: FormAnswer[];
+  view: {
+    page: number;
+  };
 }
 
 const name = "Form";
@@ -38,7 +41,10 @@ const initialState: FormState = {
   formId: 0,
   title: "Default Title",
   items: [],
-  answers: []
+  answers: [],
+  view: {
+    page: 0
+  }
 };
 
 const _ = createSlice({
@@ -46,15 +52,37 @@ const _ = createSlice({
   initialState,
   reducers: {
     success(state: FormState, action: PayloadAction<FormDataResponse>) {
-      console.log(action.payload);
       return {
         ...state,
         ...action.payload
       };
     },
-    failure(state: FormState) {}
+    failure(state: FormState) {},
+    toNext(state: FormState) {
+      const { items, view } = state;
+      const { page } = view;
+
+      if (page < items.length - 1) {
+        state.view.page += 1;
+      }
+    },
+    toPrev(state: FormState) {
+      const { view } = state;
+      const { page } = view;
+
+      if (page > initialState.view.page) {
+        state.view.page -= 1;
+      }
+    }
   }
 });
+
+const getTitle = (state: FormState): string => state.title;
+const getPage = (state: FormState): number => state.view.page;
+const getItems = (state: FormState): FormItem[] => state.items;
+const getCurrentItems = createSelector([getPage, getItems], (page, items) =>
+  items.filter((_, index) => index === page)
+);
 
 export function fetchFormData(): AppThunk {
   return async function(dispatch) {
@@ -72,6 +100,10 @@ export function fetchFormData(): AppThunk {
   };
 }
 
+export const formSelectors = {
+  title: getTitle,
+  currentItems: getCurrentItems
+};
 export const FORM = _.name;
 export const formActions = _.actions;
 export const formReducer = _.reducer;

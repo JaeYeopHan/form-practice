@@ -1,6 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { FormDataResponse } from "@/api";
+import { FormDataResponse, getFormData } from "@/api";
+
+import { AppThunk } from "./index";
+import { loadingActions } from "./loading";
 
 export enum FormType {
   CheckBox = 1,
@@ -26,7 +29,7 @@ export interface FormAnswer {
   answer: string;
 }
 
-interface FormState extends FormDataResponse {
+export interface FormState extends FormDataResponse {
   answers: FormAnswer[];
 }
 
@@ -41,8 +44,33 @@ const initialState: FormState = {
 const _ = createSlice({
   name,
   initialState,
-  reducers: {}
+  reducers: {
+    success(state: FormState, action: PayloadAction<FormDataResponse>) {
+      console.log(action.payload);
+      return {
+        ...state,
+        ...action.payload
+      };
+    },
+    failure(state: FormState) {}
+  }
 });
+
+export function fetchFormData(): AppThunk {
+  return async function(dispatch) {
+    try {
+      dispatch(loadingActions.start(name));
+
+      const result = await getFormData();
+
+      dispatch(formActions.success(result));
+    } catch (e) {
+      dispatch(formActions.failure());
+    } finally {
+      dispatch(loadingActions.finish(name));
+    }
+  };
+}
 
 export const FORM = _.name;
 export const formActions = _.actions;

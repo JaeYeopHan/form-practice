@@ -1,78 +1,49 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { FormItem } from "@/features/form";
+import { RootState } from "@/features";
+import { fetchFormData, FORM, FormState } from "@/features/form";
+import { LOADING, LoadingState } from "@/features/loading";
 
 import { Button } from "./shared/Button";
 import { FormOption } from "./shared/form/FormOption";
 import { FormTitle } from "./shared/form/FormTitle";
 import { FormWrapper } from "./shared/form/FormWrapper";
+import { Loading } from "./shared/Loading";
 import { Main } from "./shared/Main";
 import { Title } from "./shared/Title";
 
 export default () => {
+  const dispatch = useDispatch()
+  const formState = useSelector<RootState, FormState>(state => state[FORM])
+  const loading = useSelector<RootState, LoadingState>(state => state[LOADING])
   const [page, setPage] = useState(0);
-  const title = "Title";
-  const items: FormItem[] = [
-    {
-      itemId: 1,
-      title: "원하는 청소 스타일은 무엇인가요?",
-      formType: 1,
-      options: [
-        {
-          id: 1,
-          text: "스팀청소"
-        },
-        {
-          id: 2,
-          text: "진공청소기로 청소"
-        },
-        {
-          id: 3,
-          text: "쓰레기 비우기"
-        }
-      ]
-    },
-    {
-      itemId: 2,
-      title: "2원하는 청소 스타일은 무엇인가요?",
-      formType: 1,
-      options: [
-        {
-          id: 1,
-          text: "스팀청소"
-        },
-        {
-          id: 2,
-          text: "진공청소기로 청소"
-        },
-        {
-          id: 3,
-          text: "쓰레기 비우기"
-        }
-      ]
-    }
-  ];
+  const { title, items } = formState
 
-  const toNext = useCallback(
-    () =>
-      setPage(prev => {
-        if (prev === items.length - 1) {
-          return prev;
-        }
-        return prev + 1;
-      }),
-    [items.length]
-  );
-  const toBack = useCallback(
-    () =>
-      setPage(prev => {
-        if (prev === 0) {
-          return prev;
-        }
-        return prev - 1;
-      }),
-    []
-  );
+  const toNext = () =>
+    setPage(prev => {
+      if (prev === items.length - 1) {
+        return prev;
+      }
+      return prev + 1;
+    })
+
+  const toBack = () =>
+    setPage(prev => {
+      if (prev === 0) {
+        return prev;
+      }
+      return prev - 1;
+    })
+
+
+  useEffect(() => {
+    dispatch(fetchFormData())
+  }, [dispatch])
+
+  if (loading[FORM]) {
+    return <Loading />
+  }
 
   return (
     <Main>

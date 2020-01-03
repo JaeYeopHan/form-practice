@@ -27,6 +27,20 @@ $ yarn start
 - [ ] utils
   - [ ] validate
 
+```json
+{
+  "id": 1, // formId
+  "items": [{
+    "id": 1, // itemId
+    "answer": "예시 답변입니다"
+  }, {
+    "id": 2,
+    "answer": "답변,여러개,예시답변,입니다"
+  }]
+}
+
+```
+
 <div align="center">
 
 <sub><sup>Written by <a href="https://github.com/JaeYeopHan">@Jbee</a></sup></sub><small>✌</small>

@@ -33,7 +33,7 @@ export const FormContents = (props: IFormContentsProps) => {
           />
         )
       case FormType.TextInput:
-        return <FormInput />
+        return <FormInput onUpdate={handleUpdate(props.itemId)} />
       case FormType.SelectBox:
         return (
           <FormSelectBox>

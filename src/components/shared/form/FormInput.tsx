@@ -8,6 +8,7 @@ export const FormInput = (props: IFormInputProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     props.onUpdate(e.target.value)
   }
+
   return (
     <>
       <label htmlFor="text_input" />

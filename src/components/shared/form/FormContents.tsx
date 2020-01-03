@@ -7,7 +7,6 @@ import { formActions, FormItem, FormType } from '@/features/form'
 import { FormInput } from './FormInput';
 import { FormRadio } from './FormRadio';
 import { FormSelectBox } from './FormSelectbox';
-import { FormSelectOption } from './FormSelectOption';
 
 interface IFormContentsProps extends FormItem { }
 
@@ -36,14 +35,10 @@ export const FormContents = (props: IFormContentsProps) => {
         return <FormInput onUpdate={handleUpdate(props.itemId)} />
       case FormType.SelectBox:
         return (
-          <FormSelectBox>
-            {props.options.map(option => (
-              <FormSelectOption
-                key={option.id}
-                {...option}
-              />
-            ))}
-          </FormSelectBox>
+          <FormSelectBox
+            onUpdate={handleUpdate(props.itemId)}
+            options={props.options}
+          />
         )
       default:
         return <></>

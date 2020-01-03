@@ -24,17 +24,11 @@ export interface FormItem {
   options: FormOption[];
 }
 
-export interface RefinedFormItem extends FormItem {
-  optionsById: FormOptionByIdType;
-  optionIds: number[];
-}
-
 export interface IndexSignature<T> {
   [key: number]: T;
 }
 
-type FormItemByIdType = IndexSignature<RefinedFormItem>;
-export type FormOptionByIdType = IndexSignature<FormOption>;
+type FormItemByIdType = IndexSignature<FormItem>;
 
 export interface FormState {
   formId: number;
@@ -68,14 +62,7 @@ const _ = createSlice({
       const ids = items.map(({ itemId }) => itemId);
       const itemsById = items.reduce(
         (prev: FormItemByIdType, next: FormItem) => {
-          prev[next.itemId] = {
-            ...next,
-            optionsById: next.options.reduce((prev: any, next: FormOption) => {
-              prev[next.id] = next;
-              return prev;
-            }, {}),
-            optionIds: next.options.map(({ id }) => id)
-          };
+          prev[next.itemId] = next;
 
           return prev;
         },
@@ -96,7 +83,8 @@ const _ = createSlice({
       const { page } = view;
       const targetId = getTargetId(state);
 
-      if (answer[targetId] && page < ids.length - 1) {
+      // answer[targetId] &&
+      if (page < ids.length - 1) {
         state.view.page += 1;
       }
     },

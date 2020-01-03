@@ -2,14 +2,14 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 
 import { FormCheckbox } from "@/components/shared/form/FormCheckbox";
-import { formActions, FormType, RefinedFormItem } from '@/features/form'
+import { formActions, FormItem, FormType } from '@/features/form'
 
 import { FormInput } from './FormInput';
 import { FormRadio } from './FormRadio';
 import { FormSelectBox } from './FormSelectbox';
 import { FormSelectOption } from './FormSelectOption';
 
-interface IFormContentsProps extends RefinedFormItem { }
+interface IFormContentsProps extends FormItem { }
 
 export const FormContents = (props: IFormContentsProps) => {
   const dispatch = useDispatch()
@@ -22,16 +22,14 @@ export const FormContents = (props: IFormContentsProps) => {
         return (
           <FormCheckbox
             onUpdate={handleUpdate(props.itemId)}
-            optionsById={props.optionsById}
-            optionIds={props.optionIds}
+            options={props.options}
           />
         )
       case FormType.Radio:
         return (
           <FormRadio
             onUpdate={handleUpdate(props.itemId)}
-            optionsById={props.optionsById}
-            optionIds={props.optionIds}
+            options={props.options}
           />
         )
       case FormType.TextInput:

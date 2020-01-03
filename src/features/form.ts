@@ -59,6 +59,7 @@ const _ = createSlice({
   reducers: {
     success(state: FormState, action: PayloadAction<FormDataResponse>) {
       const { items, title, formId } = action.payload;
+      // TODO normalize function: (items) => { ids, itemsById }
       const ids = items.map(({ itemId }) => itemId);
       const itemsById = items.reduce(
         (prev: FormItemByIdType, next: FormItem) => {
@@ -83,10 +84,13 @@ const _ = createSlice({
       const { page } = view;
       const targetId = getTargetId(state);
 
-      // answer[targetId] &&
-      if (page < ids.length - 1) {
-        state.view.page += 1;
+      if (!answer[targetId]) {
+        return;
       }
+      if (page >= ids.length - 1) {
+        return;
+      }
+      state.view.page += 1;
     },
     toPrev(state: FormState) {
       const { view } = state;

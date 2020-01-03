@@ -26,7 +26,7 @@ export default () => {
   const handleUpdate = (value: string) => dispatch(formActions.updateAnswer({ [item.itemId]: value }))
   const handleNextClick = () => dispatch(formActions.toNext())
   const handleBackClick = () => dispatch(formActions.toPrev())
-  const handleSubmitClick = () => console.log(`submit`)
+  const handleSubmitClick = () => dispatch(formThunks.postFormAnswer())
 
   useEffect(() => {
     dispatch(formThunks.fetchFormData())

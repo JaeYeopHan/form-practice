@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { FormDataResponse, getFormData } from "@/api";
+import { FormDataResponse, getFormData, setFormData } from "@/api";
 
 import { AppThunk } from "./index";
 import { loadingActions } from "./loading";
@@ -137,6 +137,37 @@ function fetchFormData(): AppThunk {
   };
 }
 
+function postFormAnswer(): AppThunk {
+  return async function(dispatch, getState) {
+    try {
+      dispatch(loadingActions.start(name));
+
+      const state = getState();
+      const formState = state[name];
+      const { formId, answer } = formState;
+      // TODO deserialize util function: (object) => array
+      const answers = Object.keys(answer).map(key => ({
+        id: Number(key),
+        answer: answer[key]
+      }));
+
+      const result = await setFormData({
+        id: formId,
+        items: answers
+      });
+
+      if (!result) {
+        throw Error("Fail to request");
+      }
+    } catch (e) {
+      console.error(e);
+      dispatch(formActions.failure());
+    } finally {
+      dispatch(loadingActions.finish(name));
+    }
+  };
+}
+
 export const FORM = _.name;
 export const formActions = _.actions;
 export const formReducer = _.reducer;
@@ -145,5 +176,6 @@ export const formSelectors = {
   currentItem: getCurrentItem
 };
 export const formThunks = {
-  fetchFormData
+  fetchFormData,
+  postFormAnswer
 };

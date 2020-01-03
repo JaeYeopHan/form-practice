@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "@/features";
-import { FORM, formActions, FormItem, formSelectors, formThunks } from "@/features/form";
+import { FORM, formActions, formSelectors, formThunks, RefinedFormItem } from "@/features/form";
 import { LOADING, LoadingState } from "@/features/loading";
 
 import { Button } from "./shared/Button";
@@ -17,7 +17,7 @@ export default () => {
   const dispatch = useDispatch()
   const loading = useSelector<RootState, LoadingState>(state => state[LOADING])
   const title = useSelector<RootState, string>(state => formSelectors.title(state[FORM]))
-  const item = useSelector<RootState, FormItem>(state => formSelectors.currentItem(state[FORM]))
+  const item = useSelector<RootState, RefinedFormItem>(state => formSelectors.currentItem(state[FORM]))
 
   const handleNextClick = () => dispatch(formActions.toNext())
   const handleBackClick = () => dispatch(formActions.toPrev())

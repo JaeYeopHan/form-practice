@@ -24,13 +24,24 @@ export interface FormItem {
   options: FormOption[];
 }
 
-type FormItemByIdType = { [key: number]: FormItem };
+export interface RefinedFormItem extends FormItem {
+  optionsById: FormOptionByIdType;
+  optionIds: number[];
+}
+
+export interface IndexSignature<T> {
+  [key: number]: T;
+}
+
+type FormItemByIdType = IndexSignature<RefinedFormItem>;
+export type FormOptionByIdType = IndexSignature<FormOption>;
 
 export interface FormState {
   formId: number;
   title: string;
   itemsById: FormItemByIdType;
   ids: number[];
+  answer: { [key: number]: string };
   view: {
     page: number;
   };
@@ -42,6 +53,7 @@ const initialState: FormState = {
   title: "Default Title",
   itemsById: {},
   ids: [],
+  answer: {},
   view: {
     page: 0
   }
@@ -56,7 +68,14 @@ const _ = createSlice({
       const ids = items.map(({ itemId }) => itemId);
       const itemsById = items.reduce(
         (prev: FormItemByIdType, next: FormItem) => {
-          prev[next.itemId] = next;
+          prev[next.itemId] = {
+            ...next,
+            optionsById: next.options.reduce((prev: any, next: FormOption) => {
+              prev[next.id] = next;
+              return prev;
+            }, {}),
+            optionIds: next.options.map(({ id }) => id)
+          };
 
           return prev;
         },
@@ -73,11 +92,11 @@ const _ = createSlice({
     },
     failure(state: FormState) {},
     toNext(state: FormState) {
-      const { ids, view } = state;
+      const { ids, view, answer } = state;
       const { page } = view;
+      const targetId = getTargetId(state);
 
-      // TODO validate correct answer
-      if (page < ids.length - 1) {
+      if (answer[targetId] && page < ids.length - 1) {
         state.view.page += 1;
       }
     },
@@ -88,6 +107,15 @@ const _ = createSlice({
       if (page > initialState.view.page) {
         state.view.page -= 1;
       }
+    },
+    updateAnswer(
+      state: FormState,
+      action: PayloadAction<{ [key: number]: string }>
+    ) {
+      state.answer = {
+        ...state.answer,
+        ...action.payload
+      };
     }
   }
 });

@@ -1,13 +1,13 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent } from "react"
 
 interface IFormInputProps {
-  onUpdate: (value: string) => void;
+  onUpdate: (value: string) => void
 }
 
 export const FormInput = (props: IFormInputProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    props.onUpdate(e.target.value);
-  };
+    props.onUpdate(e.target.value)
+  }
 
   return (
     <>
@@ -20,5 +20,5 @@ export const FormInput = (props: IFormInputProps) => {
         onChange={handleChange}
       />
     </>
-  );
-};
+  )
+}

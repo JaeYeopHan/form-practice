@@ -1,16 +1,16 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent } from "react"
 
-import { FormOption } from "@/features/form";
+import { FormOption } from "@/features/form"
 
 interface IFormSelectBoxProps {
-  onUpdate: (value: string) => void;
-  options: FormOption[];
+  onUpdate: (value: string) => void
+  options: FormOption[]
 }
 
 export const FormSelectBox = (props: IFormSelectBoxProps) => {
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    props.onUpdate(e.target.value);
-  };
+    props.onUpdate(e.target.value)
+  }
 
   return (
     <>
@@ -28,5 +28,5 @@ export const FormSelectBox = (props: IFormSelectBoxProps) => {
         ))}
       </select>
     </>
-  );
-};
+  )
+}

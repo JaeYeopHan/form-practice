@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from "react"
 
 interface IFormWrapperProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const FormWrapper = (props: IFormWrapperProps) => {
-  return <section className="form">{props.children}</section>;
-};
+  return <section className="form">{props.children}</section>
+}

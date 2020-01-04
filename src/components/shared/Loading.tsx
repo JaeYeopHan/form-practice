@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"
 
 interface ILoadingProps {}
 
 export const Loading = (props: ILoadingProps) => {
-  return <div className="loading">loading...</div>;
-};
+  return <div className="loading">loading...</div>
+}

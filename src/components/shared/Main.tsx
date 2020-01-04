@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from "react"
 
 interface IMainProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const Main = (props: IMainProps) => {
-  return <main className="main">{props.children}</main>;
-};
+  return <main className="main">{props.children}</main>
+}

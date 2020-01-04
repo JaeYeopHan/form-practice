@@ -1,19 +1,19 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from "react"
 
-import { FormOption } from "@/features/form";
-import Map from "@/utils/mapUtils";
+import { FormOption } from "@/features/form"
+import Map from "@/utils/mapUtils"
 
 interface IFormCheckboxProps {
-  onUpdate: (value: string) => void;
-  options: FormOption[];
+  onUpdate: (value: string) => void
+  options: FormOption[]
 }
 
 export const FormCheckbox = (props: IFormCheckboxProps) => {
   const handleChange = (id: number, text: string) => {
-    const value = Object.values(Map.toggle(id, text)).join(",");
+    const value = Object.values(Map.toggle(id, text)).join(",")
 
-    props.onUpdate(value);
-  };
+    props.onUpdate(value)
+  }
 
   return (
     <>
@@ -31,5 +31,5 @@ export const FormCheckbox = (props: IFormCheckboxProps) => {
         </Fragment>
       ))}
     </>
-  );
-};
+  )
+}

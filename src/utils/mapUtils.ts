@@ -1,35 +1,35 @@
-let map: { [key: number]: string | null } = {};
+let map: { [key: number]: string | null } = {}
 
 const has = (key: number) => {
   if (map === null) {
-    return false;
+    return false
   }
-  return !!map[key];
-};
+  return !!map[key]
+}
 
 const set = (key: number, value: string) => {
-  if (map !== null) map[key] = value;
-};
+  if (map !== null) map[key] = value
+}
 
 const remove = (key: number) => {
   if (map !== null) {
-    map[key] = null;
-    delete map[key];
+    map[key] = null
+    delete map[key]
   }
-};
+}
 
 const toggle = (key: number, value: string) => {
   if (has(key)) {
-    remove(key);
+    remove(key)
   } else {
-    set(key, value);
+    set(key, value)
   }
-  return map;
-};
+  return map
+}
 
 export default {
   has,
   set,
   remove,
-  toggle
-};
+  toggle,
+}

@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from "react"
 
 interface IFormTitleProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const FormTitle = (props: IFormTitleProps) => {
-  return <h2 className="title">{props.children}</h2>;
-};
+  return <h2 className="title">{props.children}</h2>
+}

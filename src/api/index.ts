@@ -11,9 +11,14 @@ export const getFormData = (): Promise<FormDataResponse> => {
   return Promise.resolve(mock)
 }
 
+export interface SubmitAnswerType {
+  id: number
+  answer: string
+}
+
 export interface SetFormDataRequest {
   id: number
-  items: { id: number, answer: string }[]
+  items: SubmitAnswerType[]
 }
 
 export const setFormData = (data: SetFormDataRequest): Promise<boolean> => {

@@ -14,7 +14,7 @@ export const FormRadio = (props: IFormRadioProps) => {
   return (
     <>
       {props.options.map(({ id, text }) => (
-        <div key={id} className="form-option">
+        <div key={id} className="form-radio">
           <input
             id={`${id}`}
             name="radio_form_options"

@@ -21,7 +21,10 @@ export function normalize<T>(arr: T[], id: keyof T): NormalizeReturnType<T> {
   return { byId, ids }
 }
 
-export function deserialize<T>(obj: IndexSignature<T>, id: string = "id"): T[] {
+export function convertToArray<T>(
+  obj: IndexSignature<T>,
+  id: string = "id",
+): T[] {
   return Object.keys(obj).map((key: string) => ({
     [id]: Number(key),
     ...obj[Number(key)],

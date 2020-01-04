@@ -6,9 +6,9 @@ import { RootState } from "@/features"
 import {
   FORM,
   formActions,
-  FormAnswersType,
   FormItem,
   formSelectors,
+  FormState,
   formThunks,
   FormType,
 } from "@/features/form"
@@ -30,14 +30,11 @@ import { Title } from "./shared/Title"
 export default () => {
   const dispatch = useDispatch()
   const loading = useSelector<RootState, LoadingState>(state => state[LOADING])
-  const title = useSelector<RootState, string>(state =>
-    formSelectors.title(state[FORM]),
+  const { title, answers } = useSelector<RootState, FormState>(
+    state => state[FORM],
   )
   const item = useSelector<RootState, FormItem>(state =>
     formSelectors.currentItem(state[FORM]),
-  )
-  const answers = useSelector<RootState, FormAnswersType>(state =>
-    formSelectors.answers(state[FORM]),
   )
   const { submit, next, prev } = useSelector<RootState, any>(state =>
     formSelectors.isClickable(state[FORM]),
@@ -52,8 +49,8 @@ export default () => {
       }),
     )
   }
-  const handleNextClick = () => dispatch(formActions.toNext())
   const handleBackClick = () => dispatch(formActions.toPrev())
+  const handleNextClick = () => dispatch(formActions.toNext())
   const handleSubmitClick = () => dispatch(formThunks.postFormAnswer())
 
   useEffect(() => {

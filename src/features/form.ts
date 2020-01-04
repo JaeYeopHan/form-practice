@@ -1,7 +1,12 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { FormDataResponse, getFormData, setFormData } from "@/api"
-import { deserialize, IndexSignature, normalize } from "@/utils/normalize"
+import {
+  FormDataResponse,
+  getFormData,
+  setFormData,
+  SubmitAnswerType,
+} from "@/api"
+import { convertToArray, IndexSignature, normalize } from "@/utils/normalize"
 
 import { alertActions } from "./alert"
 import { AppThunk } from "./index"
@@ -27,7 +32,7 @@ export interface FormItem {
 }
 
 type FormItemByIdType = IndexSignature<FormItem>
-export type FormAnswersType = { [key: number]: { answer: string } }
+export type FormAnswersType = IndexSignature<{ answer: string }>
 
 export interface FormState {
   formId: number
@@ -90,14 +95,12 @@ const _ = createSlice({
   },
 })
 
-const getTitle = (state: FormState): string => state.title
 const getTargetId = (state: FormState): number => state.ids[state.view.page]
 const getItems = (state: FormState): FormItemByIdType => state.itemsById
 const getCurrentItem = createSelector(
   [getTargetId, getItems],
-  (page: number, itemsById) => itemsById[page] || {},
+  (targetId: number, itemsById) => itemsById[targetId] || {},
 )
-const getAnswers = (state: FormState): FormAnswersType => state.answers
 const isClickable = (state: FormState) => {
   const { view, answers, ids } = state
   const { page } = view
@@ -140,7 +143,7 @@ function postFormAnswer(): AppThunk {
         dispatch(alertActions.open(name))
       }
       const { formId: id, answers } = formState
-      const items = deserialize<{ id: number; answer: string }>(answers)
+      const items = convertToArray<SubmitAnswerType>(answers)
       const result = await setFormData({
         id,
         items,
@@ -163,9 +166,7 @@ export const FORM = _.name
 export const formActions = _.actions
 export const formReducer = _.reducer
 export const formSelectors = {
-  title: getTitle,
   currentItem: getCurrentItem,
-  answers: getAnswers,
   isClickable,
 }
 export const formThunks = {

@@ -1,4 +1,4 @@
-import { deserialize, normalize } from "./normalize"
+import { convertToArray, normalize } from "./normalize"
 
 test("normalize", () => {
   // Given
@@ -27,7 +27,7 @@ test("normalize", () => {
   expect(result).toEqual({ byId, ids })
 })
 
-test("deserialize", () => {
+test("convertToArray", () => {
   // Given
   const obj = {
     1: {
@@ -43,7 +43,7 @@ test("deserialize", () => {
   }
 
   // When
-  const result = deserialize(obj)
+  const result = convertToArray(obj)
   // Then
   expect(result).toEqual([
     { id: 1, foo: "foo1", bar: "bar1" },

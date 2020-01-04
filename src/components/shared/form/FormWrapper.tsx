@@ -1,3 +1,5 @@
+import "./FormWrapper.scss"
+
 import React, { ReactNode } from "react"
 
 interface IFormWrapperProps {

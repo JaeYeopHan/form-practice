@@ -19,14 +19,14 @@ export const FormCheckbox = (props: IFormCheckboxProps) => {
 
     props.onUpdate(value)
   }
-  const isChecked = (text: string) => {
-    return props.answer?.split(DELIMITER)?.indexOf(text) > -1
+  const isChecked = (text: string): boolean => {
+    return props.answer?.split(DELIMITER)?.indexOf(text) > -1 || false
   }
 
   return (
     <>
       {props.options.map(({ id, text }) => (
-        <div key={id} className="form-option">
+        <div key={id} className="form-checkbox">
           <input
             id={`${id}`}
             name="checkbox_form_options"

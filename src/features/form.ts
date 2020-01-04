@@ -1,7 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import { FormDataResponse, getFormData, setFormData } from "@/api"
-import { deserialize,IndexSignature,normalize } from "@/utils/normalize"
+import { deserialize, IndexSignature, normalize } from "@/utils/normalize"
 
 import { AppThunk } from "./index"
 import { loadingActions } from "./loading"
@@ -10,33 +10,33 @@ export enum FormType {
   CheckBox = 1,
   Radio = 2,
   TextInput = 3,
-  SelectBox = 4
+  SelectBox = 4,
 }
 
 export interface FormOption {
-  id: number;
-  text: string;
+  id: number
+  text: string
 }
 
 export interface FormItem {
-  itemId: number;
-  title: string;
-  formType: FormType;
-  options: FormOption[];
+  itemId: number
+  title: string
+  formType: FormType
+  options: FormOption[]
 }
 
-type FormItemByIdType = IndexSignature<FormItem>;
+type FormItemByIdType = IndexSignature<FormItem>
 type FormAnswersType = { [key: number]: { answer: string } }
 
 export interface FormState {
-  formId: number;
-  title: string;
-  itemsById: FormItemByIdType;
-  ids: number[];
-  answers: FormAnswersType;
+  formId: number
+  title: string
+  itemsById: FormItemByIdType
+  ids: number[]
+  answers: FormAnswersType
   view: {
-    page: number;
-  };
+    page: number
+  }
 }
 
 const name = "Form"
@@ -57,7 +57,7 @@ const _ = createSlice({
   reducers: {
     success(state: FormState, action: PayloadAction<FormDataResponse>) {
       const { items, title, formId } = action.payload
-      const { ids, byId: itemsById } = normalize(items, 'itemId')
+      const { ids, byId: itemsById } = normalize(items, "itemId")
 
       return {
         ...state,
@@ -91,10 +91,7 @@ const _ = createSlice({
         state.view.page -= 1
       }
     },
-    updateAnswer(
-      state: FormState,
-      action: PayloadAction<FormAnswersType>,
-    ) {
+    updateAnswer(state: FormState, action: PayloadAction<FormAnswersType>) {
       state.answers = {
         ...state.answers,
         ...action.payload,
@@ -110,9 +107,16 @@ const getCurrentItem = createSelector(
   [getTargetId, getItems],
   (page: number, itemsById) => itemsById[page] || {},
 )
-const isAvailableSubmit = (state: FormState): boolean => {
-  const { answers, ids } = state
-  return Object.keys(answers).length === ids.length
+const isClickable = (state: FormState) => {
+  const { view, answers, ids } = state
+  const { page } = view
+  const targetId = getTargetId(state)
+
+  return {
+    submit: Object.keys(answers).length === ids.length,
+    next: !!answers[targetId] && page < ids.length - 1,
+    prev: page > 0,
+  }
 }
 
 function fetchFormData(): AppThunk {
@@ -140,7 +144,7 @@ function postFormAnswer(): AppThunk {
       const state = getState()
       const formState = state[name]
       const { formId: id, answers } = formState
-      const items = deserialize<{ id: number, answer: string }>(answers)
+      const items = deserialize<{ id: number; answer: string }>(answers)
       const result = await setFormData({
         id,
         items,
@@ -164,7 +168,7 @@ export const formReducer = _.reducer
 export const formSelectors = {
   title: getTitle,
   currentItem: getCurrentItem,
-  isAvailableSubmit,
+  isClickable,
 }
 export const formThunks = {
   fetchFormData,

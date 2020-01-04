@@ -33,8 +33,8 @@ export default () => {
   const item = useSelector<RootState, FormItem>(state =>
     formSelectors.currentItem(state[FORM]),
   )
-  const isAvailableSubmit = useSelector<RootState, boolean>(state =>
-    formSelectors.isAvailableSubmit(state[FORM]),
+  const { submit, next, prev } = useSelector<RootState, any>(state =>
+    formSelectors.isClickable(state[FORM]),
   )
 
   const handleUpdate = (value: string) => {
@@ -73,9 +73,13 @@ export default () => {
         <FormTitle>{item.title}</FormTitle>
         <FormComponent onUpdate={handleUpdate} options={item.options} />
       </FormWrapper>
-      <Button onClick={handleBackClick}>Back</Button>
-      <Button onClick={handleNextClick}>Next</Button>
-      <Button onClick={handleSubmitClick} isDisabled={!isAvailableSubmit}>
+      <Button onClick={handleBackClick} isDisabled={!prev}>
+        Back
+      </Button>
+      <Button onClick={handleNextClick} isDisabled={!next}>
+        Next
+      </Button>
+      <Button onClick={handleSubmitClick} isDisabled={!submit}>
         Submit
       </Button>
     </Main>

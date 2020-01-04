@@ -35,7 +35,11 @@ export default () => {
   )
 
   const handleUpdate = (value: string) => {
-    dispatch(formActions.updateAnswer({ [item.itemId]: value }))
+    dispatch(formActions.updateAnswer({
+      [item.itemId]: {
+        answer: value,
+      },
+    }))
   }
   const handleNextClick = () => dispatch(formActions.toNext())
   const handleBackClick = () => dispatch(formActions.toPrev())

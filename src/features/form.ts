@@ -1,6 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import { FormDataResponse, getFormData, setFormData } from "@/api"
+import { deserialize,IndexSignature,normalize } from "@/utils/normalize"
 
 import { AppThunk } from "./index"
 import { loadingActions } from "./loading"
@@ -24,18 +25,15 @@ export interface FormItem {
   options: FormOption[];
 }
 
-export interface IndexSignature<T> {
-  [key: number]: T;
-}
-
 type FormItemByIdType = IndexSignature<FormItem>;
+type FormAnswersType = { [key: number]: { answer: string } }
 
 export interface FormState {
   formId: number;
   title: string;
   itemsById: FormItemByIdType;
   ids: number[];
-  answer: { [key: number]: string };
+  answers: FormAnswersType;
   view: {
     page: number;
   };
@@ -47,7 +45,7 @@ const initialState: FormState = {
   title: "Default Title",
   itemsById: {},
   ids: [],
-  answer: {},
+  answers: {},
   view: {
     page: 0,
   },
@@ -59,16 +57,7 @@ const _ = createSlice({
   reducers: {
     success(state: FormState, action: PayloadAction<FormDataResponse>) {
       const { items, title, formId } = action.payload
-      // TODO normalize function: (items) => { ids, itemsById }
-      const ids = items.map(({ itemId }) => itemId)
-      const itemsById = items.reduce(
-        (prev: FormItemByIdType, next: FormItem) => {
-          prev[next.itemId] = next
-
-          return prev
-        },
-        {},
-      )
+      const { ids, byId: itemsById } = normalize(items, 'itemId')
 
       return {
         ...state,
@@ -82,11 +71,11 @@ const _ = createSlice({
       state.title = "Network Error"
     },
     toNext(state: FormState) {
-      const { ids, view, answer } = state
+      const { ids, view, answers } = state
       const { page } = view
       const targetId = getTargetId(state)
 
-      if (!answer[targetId]) {
+      if (!answers[targetId]) {
         return
       }
       if (page >= ids.length - 1) {
@@ -104,10 +93,10 @@ const _ = createSlice({
     },
     updateAnswer(
       state: FormState,
-      action: PayloadAction<{ [key: number]: string }>,
+      action: PayloadAction<FormAnswersType>,
     ) {
-      state.answer = {
-        ...state.answer,
+      state.answers = {
+        ...state.answers,
         ...action.payload,
       }
     },
@@ -146,16 +135,11 @@ function postFormAnswer(): AppThunk {
 
       const state = getState()
       const formState = state[name]
-      const { formId, answer } = formState
-      // TODO deserialize util function: (object) => array
-      const answers = Object.keys(answer).map(key => ({
-        id: Number(key),
-        answer: answer[key],
-      }))
-
+      const { formId: id, answers } = formState
+      const items = deserialize<{ id: number, answer: string }>(answers)
       const result = await setFormData({
-        id: formId,
-        items: answers,
+        id,
+        items,
       })
 
       if (!result) {

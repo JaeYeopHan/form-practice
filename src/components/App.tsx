@@ -100,7 +100,7 @@ export default () => {
           </Button>
         </ButtonWrapper>
       </Main>
-      <Alert id={FORM}>올바르지 않은 입력입니다.</Alert>
+      <Alert id={FORM}>값을 입력해주세요.</Alert>
     </>
   )
 }

@@ -1,3 +1,5 @@
+import "./FormInput.scss"
+
 import React, { ChangeEvent } from "react"
 
 interface IFormInputProps {
@@ -10,7 +12,7 @@ export const FormInput = (props: IFormInputProps) => {
   }
 
   return (
-    <>
+    <div className="form-input">
       <label htmlFor="text_input" />
       <input
         id="text_input"
@@ -19,6 +21,6 @@ export const FormInput = (props: IFormInputProps) => {
         required={true}
         onChange={handleChange}
       />
-    </>
+    </div>
   )
 }

@@ -1,3 +1,5 @@
+import "./Title.scss"
+
 import React, { ReactNode } from "react"
 
 interface ITitleProps {
@@ -5,5 +7,5 @@ interface ITitleProps {
 }
 
 export const Title = (props: ITitleProps) => {
-  return <h1>{props.children}</h1>
+  return <h1 className="title">{props.children}</h1>
 }

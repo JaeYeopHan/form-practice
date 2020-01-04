@@ -1,3 +1,5 @@
+import "./FormSelectbox.scss"
+
 import React, { ChangeEvent } from "react"
 
 import { FormOption } from "@/features/form"
@@ -13,7 +15,7 @@ export const FormSelectBox = (props: IFormSelectBoxProps) => {
   }
 
   return (
-    <>
+    <div className="form-selectbox">
       <label htmlFor="selectbox-option" />
       <select
         name="selectbox"
@@ -27,6 +29,6 @@ export const FormSelectBox = (props: IFormSelectBoxProps) => {
           </option>
         ))}
       </select>
-    </>
+    </div>
   )
 }

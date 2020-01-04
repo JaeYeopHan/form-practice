@@ -15,6 +15,7 @@ import { LOADING, LoadingState } from "@/features/loading"
 
 import { Alert } from "./shared/Alert"
 import { Button } from "./shared/Button"
+import { ButtonWrapper } from "./shared/ButtonWrapper"
 import { Empty } from "./shared/Empty"
 import { FormInput } from "./shared/form/FormInput"
 import { FormRadio } from "./shared/form/FormRadio"
@@ -75,19 +76,21 @@ export default () => {
           <FormTitle>{item.title}</FormTitle>
           <FormComponent onUpdate={handleUpdate} options={item.options} />
         </FormWrapper>
-        <Button onClick={handleBackClick} isDisabled={!prev}>
-          Back
-        </Button>
-        <Button onClick={handleNextClick} isDisabled={!next} useAlert={true}>
-          Next
-        </Button>
-        <Button
-          onClick={handleSubmitClick}
-          isDisabled={!submit}
-          useAlert={true}
-        >
-          Submit
-        </Button>
+        <ButtonWrapper>
+          <Button onClick={handleBackClick} isDisabled={!prev}>
+            Back
+          </Button>
+          <Button onClick={handleNextClick} isDisabled={!next} useAlert={true}>
+            Next
+          </Button>
+          <Button
+            onClick={handleSubmitClick}
+            isDisabled={!submit}
+            useAlert={true}
+          >
+            Submit
+          </Button>
+        </ButtonWrapper>
       </Main>
       <Alert id={FORM}>올바르지 않은 입력입니다.</Alert>
     </>

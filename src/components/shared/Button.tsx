@@ -1,3 +1,5 @@
+import "./Button.scss"
+
 import React, { MouseEvent, MouseEventHandler, ReactNode } from "react"
 import { useDispatch } from "react-redux"
 
@@ -27,10 +29,14 @@ export const Button = ({
   }
 
   if (useAlert) {
-    return <button onClick={handleClick}>{children}</button>
+    return (
+      <button className="form-button" onClick={handleClick}>
+        {children}
+      </button>
+    )
   }
   return (
-    <button onClick={onClick} disabled={isDisabled}>
+    <button className="form-button" onClick={onClick} disabled={isDisabled}>
       {children}
     </button>
   )

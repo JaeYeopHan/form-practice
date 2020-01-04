@@ -1,4 +1,6 @@
-import React, { Fragment } from "react"
+import "./FormRadio.scss"
+
+import React from "react"
 
 import { FormOption } from "@/features/form"
 
@@ -11,17 +13,16 @@ export const FormRadio = (props: IFormRadioProps) => {
   return (
     <>
       {props.options.map(({ id, text }) => (
-        <Fragment key={id}>
+        <div key={id} className="form-option">
           <input
             id={`${id}`}
             name="radio_form_options"
             value={text}
             type="radio"
-            className="form-option"
             onChange={() => props.onUpdate(text)}
           />
           <label htmlFor={`${id}`}>{text}</label>
-        </Fragment>
+        </div>
       ))}
     </>
   )

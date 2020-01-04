@@ -1,4 +1,6 @@
-import React, { Fragment } from "react"
+import "./FormCheckbox.scss"
+
+import React from "react"
 
 import { FormOption } from "@/features/form"
 import Map from "@/utils/mapUtils"
@@ -18,17 +20,16 @@ export const FormCheckbox = (props: IFormCheckboxProps) => {
   return (
     <>
       {props.options.map(({ id, text }) => (
-        <Fragment key={id}>
+        <div key={id} className="form-option">
           <input
             id={`${id}`}
             name="checkbox_form_options"
             value={text}
             type="checkbox"
-            className="form-option"
             onChange={() => handleChange(id, text)}
           />
           <label htmlFor={`${id}`}>{text}</label>
-        </Fragment>
+        </div>
       ))}
     </>
   )

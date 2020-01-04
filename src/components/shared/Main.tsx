@@ -1,3 +1,5 @@
+import "./Main.scss"
+
 import React, { ReactNode } from "react"
 
 interface IMainProps {

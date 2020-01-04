@@ -1,3 +1,5 @@
+import "./FormTitle.scss"
+
 import React, { ReactNode } from "react"
 
 interface IFormTitleProps {
@@ -5,5 +7,5 @@ interface IFormTitleProps {
 }
 
 export const FormTitle = (props: IFormTitleProps) => {
-  return <h2 className="title">{props.children}</h2>
+  return <h2 className="form-title">{props.children}</h2>
 }

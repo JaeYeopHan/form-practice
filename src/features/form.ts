@@ -78,7 +78,9 @@ const _ = createSlice({
         ids
       };
     },
-    failure(state: FormState) {},
+    failure(state: FormState) {
+      state.title = "Network Error";
+    },
     toNext(state: FormState) {
       const { ids, view, answer } = state;
       const { page } = view;

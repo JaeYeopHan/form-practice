@@ -3,8 +3,8 @@ import React, { Fragment } from "react";
 import { FormOption } from "@/features/form";
 
 interface IFormRadioProps {
-  onUpdate: (value: string) => void
-  options: FormOption[]
+  onUpdate: (value: string) => void;
+  options: FormOption[];
 }
 
 export const FormRadio = (props: IFormRadioProps) => {

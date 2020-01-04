@@ -33,13 +33,18 @@ export default () => {
   const item = useSelector<RootState, FormItem>(state =>
     formSelectors.currentItem(state[FORM]),
   )
+  const isAvailableSubmit = useSelector<RootState, boolean>(state =>
+    formSelectors.isAvailableSubmit(state[FORM]),
+  )
 
   const handleUpdate = (value: string) => {
-    dispatch(formActions.updateAnswer({
-      [item.itemId]: {
-        answer: value,
-      },
-    }))
+    dispatch(
+      formActions.updateAnswer({
+        [item.itemId]: {
+          answer: value,
+        },
+      }),
+    )
   }
   const handleNextClick = () => dispatch(formActions.toNext())
   const handleBackClick = () => dispatch(formActions.toPrev())
@@ -49,12 +54,13 @@ export default () => {
     dispatch(formThunks.fetchFormData())
   }, [dispatch])
 
-  const FormComponent = {
-    [FormType.CheckBox]: FormCheckbox,
-    [FormType.Radio]: FormRadio,
-    [FormType.TextInput]: FormInput,
-    [FormType.SelectBox]: FormSelectBox,
-  }[item.formType] || Empty
+  const FormComponent =
+    {
+      [FormType.CheckBox]: FormCheckbox,
+      [FormType.Radio]: FormRadio,
+      [FormType.TextInput]: FormInput,
+      [FormType.SelectBox]: FormSelectBox,
+    }[item.formType] || Empty
 
   if (loading[FORM]) {
     return <Loading />
@@ -69,7 +75,9 @@ export default () => {
       </FormWrapper>
       <Button onClick={handleBackClick}>Back</Button>
       <Button onClick={handleNextClick}>Next</Button>
-      <Button onClick={handleSubmitClick}>Submit</Button>
+      <Button onClick={handleSubmitClick} isDisabled={!isAvailableSubmit}>
+        Submit
+      </Button>
     </Main>
   )
 }

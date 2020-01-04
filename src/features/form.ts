@@ -110,6 +110,10 @@ const getCurrentItem = createSelector(
   [getTargetId, getItems],
   (page: number, itemsById) => itemsById[page] || {},
 )
+const isAvailableSubmit = (state: FormState): boolean => {
+  const { answers, ids } = state
+  return Object.keys(answers).length === ids.length
+}
 
 function fetchFormData(): AppThunk {
   return async function(dispatch) {
@@ -160,6 +164,7 @@ export const formReducer = _.reducer
 export const formSelectors = {
   title: getTitle,
   currentItem: getCurrentItem,
+  isAvailableSubmit,
 }
 export const formThunks = {
   fetchFormData,

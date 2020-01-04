@@ -4,10 +4,12 @@ import React, { ChangeEvent } from "react"
 
 interface IFormInputProps {
   onUpdate: (value: string) => void
+  answer: string
 }
 
 export const FormInput = (props: IFormInputProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // e.preventDefault()
     props.onUpdate(e.target.value)
   }
 
@@ -20,6 +22,7 @@ export const FormInput = (props: IFormInputProps) => {
         autoFocus={true}
         required={true}
         onChange={handleChange}
+        value={props.answer || ""}
       />
     </div>
   )

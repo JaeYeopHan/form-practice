@@ -7,6 +7,7 @@ import { FormOption } from "@/features/form"
 interface IFormSelectBoxProps {
   onUpdate: (value: string) => void
   options: FormOption[]
+  answer: string
 }
 
 export const FormSelectBox = (props: IFormSelectBoxProps) => {
@@ -22,6 +23,7 @@ export const FormSelectBox = (props: IFormSelectBoxProps) => {
         id="selectbox-option"
         required={true}
         onChange={handleChange}
+        defaultValue={props.answer}
       >
         {props.options.map(({ id, text }) => (
           <option key={id} value={text}>

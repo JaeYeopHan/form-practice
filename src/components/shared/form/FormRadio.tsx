@@ -7,6 +7,7 @@ import { FormOption } from "@/features/form"
 interface IFormRadioProps {
   onUpdate: (value: string) => void
   options: FormOption[]
+  answer: string
 }
 
 export const FormRadio = (props: IFormRadioProps) => {
@@ -20,6 +21,7 @@ export const FormRadio = (props: IFormRadioProps) => {
             value={text}
             type="radio"
             onChange={() => props.onUpdate(text)}
+            checked={text === props.answer}
           />
           <label htmlFor={`${id}`}>{text}</label>
         </div>

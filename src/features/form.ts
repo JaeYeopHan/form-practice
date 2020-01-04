@@ -3,6 +3,7 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FormDataResponse, getFormData, setFormData } from "@/api"
 import { deserialize, IndexSignature, normalize } from "@/utils/normalize"
 
+import { alertActions } from "./alert"
 import { AppThunk } from "./index"
 import { loadingActions } from "./loading"
 
@@ -26,7 +27,7 @@ export interface FormItem {
 }
 
 type FormItemByIdType = IndexSignature<FormItem>
-type FormAnswersType = { [key: number]: { answer: string } }
+export type FormAnswersType = { [key: number]: { answer: string } }
 
 export interface FormState {
   formId: number
@@ -96,6 +97,7 @@ const getCurrentItem = createSelector(
   [getTargetId, getItems],
   (page: number, itemsById) => itemsById[page] || {},
 )
+const getAnswers = (state: FormState): FormAnswersType => state.answers
 const isClickable = (state: FormState) => {
   const { view, answers, ids } = state
   const { page } = view
@@ -118,7 +120,8 @@ function fetchFormData(): AppThunk {
       dispatch(formActions.success(result))
     } catch (e) {
       console.error(e)
-      dispatch(formActions.failure()) // TODO errorActions.alert()
+      dispatch(formActions.failure())
+      dispatch(alertActions.open(name))
     } finally {
       dispatch(loadingActions.finish(name))
     }
@@ -134,7 +137,7 @@ function postFormAnswer(): AppThunk {
       const formState = state[name]
 
       if (!isClickable(formState).submit) {
-        // alert
+        dispatch(alertActions.open(name))
       }
       const { formId: id, answers } = formState
       const items = deserialize<{ id: number; answer: string }>(answers)
@@ -149,6 +152,7 @@ function postFormAnswer(): AppThunk {
     } catch (e) {
       console.error(e)
       dispatch(formActions.failure())
+      dispatch(alertActions.open(name))
     } finally {
       dispatch(loadingActions.finish(name))
     }
@@ -161,6 +165,7 @@ export const formReducer = _.reducer
 export const formSelectors = {
   title: getTitle,
   currentItem: getCurrentItem,
+  answers: getAnswers,
   isClickable,
 }
 export const formThunks = {

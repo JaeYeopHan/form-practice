@@ -6,6 +6,7 @@ import { RootState } from "@/features"
 import {
   FORM,
   formActions,
+  FormAnswersType,
   FormItem,
   formSelectors,
   formThunks,
@@ -34,6 +35,9 @@ export default () => {
   )
   const item = useSelector<RootState, FormItem>(state =>
     formSelectors.currentItem(state[FORM]),
+  )
+  const answers = useSelector<RootState, FormAnswersType>(state =>
+    formSelectors.answers(state[FORM]),
   )
   const { submit, next, prev } = useSelector<RootState, any>(state =>
     formSelectors.isClickable(state[FORM]),
@@ -74,7 +78,11 @@ export default () => {
         <Title>{title}</Title>
         <FormWrapper>
           <FormTitle>{item.title}</FormTitle>
-          <FormComponent onUpdate={handleUpdate} options={item.options} />
+          <FormComponent
+            onUpdate={handleUpdate}
+            options={item.options}
+            answer={answers[item.itemId]?.answer}
+          />
         </FormWrapper>
         <ButtonWrapper>
           <Button onClick={handleBackClick} isDisabled={!prev}>

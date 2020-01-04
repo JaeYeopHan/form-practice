@@ -9,7 +9,7 @@ interface IFormInputProps {
 
 export const FormInput = (props: IFormInputProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // e.preventDefault()
+    e.preventDefault()
     props.onUpdate(e.target.value)
   }
 

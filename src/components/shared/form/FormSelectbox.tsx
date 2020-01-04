@@ -11,6 +11,7 @@ interface IFormSelectBoxProps {
 }
 
 export const FormSelectBox = (props: IFormSelectBoxProps) => {
+  const defaultValue = "default"
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     props.onUpdate(e.target.value)
   }
@@ -23,8 +24,11 @@ export const FormSelectBox = (props: IFormSelectBoxProps) => {
         id="selectbox-option"
         required={true}
         onChange={handleChange}
-        defaultValue={props.answer}
+        defaultValue={props.answer || defaultValue}
       >
+        <option value={defaultValue} disabled={true}>
+          --선택--
+        </option>
         {props.options.map(({ id, text }) => (
           <option key={id} value={text}>
             {text}

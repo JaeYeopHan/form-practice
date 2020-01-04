@@ -71,23 +71,12 @@ const _ = createSlice({
       state.title = "Network Error"
     },
     toNext(state: FormState) {
-      const { ids, view, answers } = state
-      const { page } = view
-      const targetId = getTargetId(state)
-
-      if (!answers[targetId]) {
-        return
+      if (isClickable(state).next) {
+        state.view.page += 1
       }
-      if (page >= ids.length - 1) {
-        return
-      }
-      state.view.page += 1
     },
     toPrev(state: FormState) {
-      const { view } = state
-      const { page } = view
-
-      if (page > initialState.view.page) {
+      if (isClickable(state).prev) {
         state.view.page -= 1
       }
     },
@@ -143,6 +132,10 @@ function postFormAnswer(): AppThunk {
 
       const state = getState()
       const formState = state[name]
+
+      if (!isClickable(formState).submit) {
+        // alert
+      }
       const { formId: id, answers } = formState
       const items = deserialize<{ id: number; answer: string }>(answers)
       const result = await setFormData({

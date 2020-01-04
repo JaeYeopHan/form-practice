@@ -9,7 +9,7 @@ test("loadingActions open", () => {
   const result = loadingReducer(prevState, loadingActions.start(key))
 
   // Then
-  expect(result[key]).toEqual(true)
+  expect(result).toEqual({ [key]: true })
 })
 
 test("loadingActions close", () => {
@@ -21,5 +21,5 @@ test("loadingActions close", () => {
   const result = loadingReducer(prevState, loadingActions.finish(key))
 
   // Then
-  expect(result[key]).toEqual(false)
+  expect(result).toEqual({ [key]: false })
 })
